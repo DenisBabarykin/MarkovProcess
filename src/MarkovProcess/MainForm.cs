@@ -70,17 +70,21 @@ namespace MarkovProcess
                 Matr = new double[MatrixSize, MatrixSize];
                 FinalProbs = new double[MatrixSize];
 
+                ClearMatrix(Matr, MatrixSize, MatrixSize);
+                ClearArray(FinalProbs);
+
                 for (int i = 0; i < MatrixSize - 1; ++i)
                 {
-                    FinalProbs[i] = 0;
                     for (int j = 0; j < MatrixSize; ++j)
-                    {
                         Matr[i, i] -= GetCellValue(i, j);
-                        Matr[MatrixSize - 1, j] = 1;
-                    }
-                    for (int k = 0; k < MatrixSize; ++k)
-                        Matr[i, k] += GetCellValue(k, i);
+
+                    for (int j = 0; j < MatrixSize; ++j)
+                        Matr[i, j] += GetCellValue(j, i);
                 }
+
+                for (int i = 0; i < MatrixSize; ++i)
+                    Matr[MatrixSize - 1, i] = 1;
+
                 FinalProbs[MatrixSize - 1] = 1;
 
                 Gauss gauss = new Gauss(Matr, FinalProbs, MatrixSize);
@@ -101,6 +105,19 @@ namespace MarkovProcess
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void ClearMatrix(double[,] matrix, int rowCount, int colCount)
+        {
+            for (int i = 0; i < rowCount; ++i)
+                for (int j = 0; j < colCount; ++j)
+                    matrix[i, j] = 0;
+        }
+
+        private void ClearArray(double[] array)
+        {
+            for (int i = 0; i < array.Length; ++i)
+                array[i] = 0;
         }
 
         private void btnClear_Click(object sender, EventArgs e)
