@@ -124,6 +124,7 @@
             this.Controls.Add(this.tblCDS);
             this.Name = "MainForm";
             this.Text = "Моделирование марковского процесса";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.tblCDS)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

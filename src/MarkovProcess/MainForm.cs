@@ -19,8 +19,6 @@ namespace MarkovProcess
         public MainForm()
         {
             InitializeComponent();
-
-            MatrixSize = 0;
             MatrixSize = 0;
         }
 
@@ -111,6 +109,11 @@ namespace MarkovProcess
                 for (int i = 0; i < MatrixSize; ++i)
                     tblCDS[j, i].Value = "";
 
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            btnSizeOk_Click(this, new EventArgs());
         }
 
 
