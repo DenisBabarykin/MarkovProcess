@@ -12,39 +12,34 @@ namespace MarkovProcess
 {
     public partial class MainForm : Form
     {
-        private int _rowCount;
-        private int _colCount;
-        private double[,] _s;
-        private double[] _t;
+        int MatrixSize { get; set; }
+        double[,] Matr { get; set; }
+        double[] FinalProbs { get; set; }
 
         public MainForm()
         {
             InitializeComponent();
 
-            _rowCount = 0;
-            _colCount = 0;
+            MatrixSize = 0;
+            MatrixSize = 0;
         }
 
         private void btnSizeOk_Click(object sender, EventArgs e)
         {
             try
             {
-                _rowCount = int.Parse(edtRows.Text);
-                _colCount = int.Parse(edtRows.Text);
-                _s = new double[_rowCount, _colCount];
-                _t = new double[_colCount];
+                MatrixSize = int.Parse(edtRows.Text);
+                tblCDS.ColumnCount = MatrixSize;
+                tblCDS.RowCount = MatrixSize;
 
-                tblCDS.ColumnCount = _colCount;
-                tblCDS.RowCount = _rowCount;
-
-                for (int i = 0; i < _colCount; ++i)
+                for (int i = 0; i < MatrixSize; ++i)
                 {
                     tblCDS.Columns[i].Name = "S" + (i + 1).ToString();
                     tblCDS.Columns[i].Width = 70;
                     tblCDS.Columns[i].DefaultCellStyle.Format = "F4";
                 }
 
-                for (int i = 0; i < _rowCount; ++i)
+                for (int i = 0; i < MatrixSize; ++i)
                 {
                     tblCDS.Rows[i].HeaderCell.Value = "S" + (i + 1).ToString();                    
                 }
@@ -64,6 +59,9 @@ namespace MarkovProcess
             else
                 res = double.Parse(val.ToString());
 
+            if (res < 0)
+                throw new Exception("Интенсивность не может быть отрицательной");
+
             return res;
         }
 
@@ -71,39 +69,48 @@ namespace MarkovProcess
         {
             try
             {
-                for (int i = 0; i < _rowCount - 1; ++i)
+                Matr = new double[MatrixSize, MatrixSize];
+                FinalProbs = new double[MatrixSize];
+
+                for (int i = 0; i < MatrixSize - 1; ++i)
                 {
-                    _t[i] = 0;
-                    for (int j = 0; j < _colCount; ++j)
+                    FinalProbs[i] = 0;
+                    for (int j = 0; j < MatrixSize; ++j)
                     {
-                        _s[i, i] -= GetCellValue(i, j);
-                        _s[_rowCount - 1, j] = 1;
+                        Matr[i, i] -= GetCellValue(i, j);
+                        Matr[MatrixSize - 1, j] = 1;
                     }
-                    for (int k = 0; k < _rowCount; ++k)
-                        _s[i, k] += GetCellValue(k, i);
+                    for (int k = 0; k < MatrixSize; ++k)
+                        Matr[i, k] += GetCellValue(k, i);
                 }
-                _t[_rowCount - 1] = 1;
+                FinalProbs[MatrixSize - 1] = 1;
 
-                Gauss gs = new Gauss(_s, _t, _rowCount);
-                if (!gs.Solve())
-                    return;
-                for (int i = 0; i < _colCount; ++i)
+                Gauss gauss = new Gauss(Matr, FinalProbs, MatrixSize);
+
+                if (!gauss.Solve())
+                    throw new Exception("Нет решений");
+
+                for (int i = 0; i < MatrixSize; ++i)
                 {
-                    _t[i] = gs.GetX(i);
+                    FinalProbs[i] = gauss.GetX(i);
                 }
 
-                tblCDS.RowCount = _rowCount;
-                tblCDS.Rows.Add(_t.Select(x => (object) x).ToArray());
-                tblCDS.Rows[_rowCount].HeaderCell.Value = "t";
+                tblCDS.RowCount = MatrixSize;
+                tblCDS.Rows.Add(FinalProbs.Select(x => (object) x).ToArray());
+                tblCDS.Rows[MatrixSize].HeaderCell.Value = "t";
             }
-            catch (FormatException ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-            catch (Exception)
-            {
-                MessageBox.Show("Неверная матрица переходов");
-            }
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            for (int j = 0; j < tblCDS.ColumnCount; ++j)
+                for (int i = 0; i < MatrixSize; ++i)
+                    tblCDS[j, i].Value = "";
+
         }
 
 

@@ -34,6 +34,7 @@
             this.btnSizeOk = new System.Windows.Forms.Button();
             this.edtRows = new System.Windows.Forms.TextBox();
             this.bntSolve = new System.Windows.Forms.Button();
+            this.btnClear = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.tblCDS)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -62,24 +63,25 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnClear);
             this.groupBox1.Controls.Add(this.btnSizeOk);
             this.groupBox1.Controls.Add(this.edtRows);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox1.Location = new System.Drawing.Point(12, 367);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(390, 62);
+            this.groupBox1.Size = new System.Drawing.Size(390, 88);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Размер матрицы";
             // 
             // btnSizeOk
             // 
-            this.btnSizeOk.Location = new System.Drawing.Point(281, 22);
+            this.btnSizeOk.Location = new System.Drawing.Point(264, 22);
             this.btnSizeOk.Name = "btnSizeOk";
-            this.btnSizeOk.Size = new System.Drawing.Size(102, 26);
+            this.btnSizeOk.Size = new System.Drawing.Size(119, 26);
             this.btnSizeOk.TabIndex = 5;
-            this.btnSizeOk.Text = "Применить";
+            this.btnSizeOk.Text = "Сформировать";
             this.btnSizeOk.UseVisualStyleBackColor = true;
             this.btnSizeOk.Click += new System.EventHandler(this.btnSizeOk_Click);
             // 
@@ -94,7 +96,7 @@
             // bntSolve
             // 
             this.bntSolve.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.bntSolve.Location = new System.Drawing.Point(12, 435);
+            this.bntSolve.Location = new System.Drawing.Point(12, 480);
             this.bntSolve.Name = "bntSolve";
             this.bntSolve.Size = new System.Drawing.Size(390, 33);
             this.bntSolve.TabIndex = 4;
@@ -102,11 +104,21 @@
             this.bntSolve.UseVisualStyleBackColor = true;
             this.bntSolve.Click += new System.EventHandler(this.bntSolve_Click);
             // 
+            // btnClear
+            // 
+            this.btnClear.Location = new System.Drawing.Point(264, 54);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(119, 26);
+            this.btnClear.TabIndex = 6;
+            this.btnClear.Text = "Очистить";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(417, 484);
+            this.ClientSize = new System.Drawing.Size(417, 525);
             this.Controls.Add(this.bntSolve);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.tblCDS);
@@ -127,6 +139,7 @@
         private System.Windows.Forms.Button btnSizeOk;
         private System.Windows.Forms.TextBox edtRows;
         private System.Windows.Forms.Button bntSolve;
+        private System.Windows.Forms.Button btnClear;
     }
 }
 
