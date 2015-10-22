@@ -8,7 +8,7 @@ namespace MarkovProcess
 {
     public class Compare
     {
-        public static double EPS = 0.01;
+        public static double EPS = 0.001;
 
         public static bool Equal(double num1, double num2)
         {

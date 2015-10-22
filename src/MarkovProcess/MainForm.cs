@@ -119,20 +119,45 @@ namespace MarkovProcess
             ClearArray(curProbs);
             curProbs[0] = 1;
 
-            double t;
-            for (t = 0; !Compare.Equal(curProbs, FinalProbs); t += deltaT)
+            double t = 0, prevT = 0, resT = 0;
+            int succesIterations = 0;
+            const int SuccesIterationsLimit = 1000;
+            do
             {
-                prevProbs = (double[])curProbs.Clone();
-                for (int i = 0; i < MatrixSize; ++i)
+                for (t = prevT; !Compare.Equal(curProbs, FinalProbs); t += deltaT)
                 {
-                    double densitySum = 0;
-                    for (int j = 0; j < MatrixSize; ++j)
-                        densitySum += Matr[i, j] * prevProbs[j];
-                    curProbs[i] = prevProbs[i] + densitySum * deltaT;
+                    CalcProbabilities(deltaT, curProbs, prevProbs);
                 }
-            }
+                if (succesIterations == 0)
+                {
+                    resT = t;
+                    succesIterations++;
+                }
+                else if (resT - t > 1.5 * deltaT)
+                {
+                    resT = t;
+                    succesIterations = 1;
+                }
+                else
+                    succesIterations++;
 
-            return t;
+                prevT = t + deltaT;
+            }
+            while (succesIterations < SuccesIterationsLimit);
+
+            return resT;
+        }
+
+        private void CalcProbabilities(double deltaT, double[] curProbs, double[] prevProbs)
+        {
+            prevProbs = (double[])curProbs.Clone();
+            for (int i = 0; i < MatrixSize; ++i)
+            {
+                double densitySum = 0;
+                for (int j = 0; j < MatrixSize; ++j)
+                    densitySum += Matr[i, j] * prevProbs[j];
+                curProbs[i] = prevProbs[i] + densitySum * deltaT;
+            }
         }
 
         private void ClearMatrix(double[,] matrix, int rowCount, int colCount)
