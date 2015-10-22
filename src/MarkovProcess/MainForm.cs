@@ -39,7 +39,7 @@ namespace MarkovProcess
 
                 for (int i = 0; i < MatrixSize; ++i)
                 {
-                    tblCDS.Rows[i].HeaderCell.Value = "S" + (i + 1).ToString();                    
+                    tblCDS.Rows[i].HeaderCell.Value = "S" + (i + 1).ToString();
                 }
             }
             catch (FormatException ex)
@@ -52,7 +52,7 @@ namespace MarkovProcess
         {
             double res;
             object val = tblCDS[j, i].Value;
-            if (val == null)
+            if (val == null || val == "")
                 res = 0;
             else
                 res = double.Parse(val.ToString());
@@ -72,8 +72,9 @@ namespace MarkovProcess
 
                 ClearMatrix(Matr, MatrixSize, MatrixSize);
                 ClearArray(FinalProbs);
+                FinalProbs[MatrixSize - 1] = 1;
 
-                for (int i = 0; i < MatrixSize - 1; ++i)
+                for (int i = 0; i < MatrixSize; ++i)
                 {
                     for (int j = 0; j < MatrixSize; ++j)
                         Matr[i, i] -= GetCellValue(i, j);
@@ -82,12 +83,11 @@ namespace MarkovProcess
                         Matr[i, j] += GetCellValue(j, i);
                 }
 
+                double[,] A = (double[,])Matr.Clone();
                 for (int i = 0; i < MatrixSize; ++i)
-                    Matr[MatrixSize - 1, i] = 1;
+                    A[MatrixSize - 1, i] = 1;
 
-                FinalProbs[MatrixSize - 1] = 1;
-
-                Gauss gauss = new Gauss(Matr, FinalProbs, MatrixSize);
+                Gauss gauss = new Gauss(A, FinalProbs, MatrixSize);
 
                 if (!gauss.Solve())
                     throw new Exception("Нет решений");
@@ -98,13 +98,41 @@ namespace MarkovProcess
                 }
 
                 tblCDS.RowCount = MatrixSize;
-                tblCDS.Rows.Add(FinalProbs.Select(x => (object) x).ToArray());
+                tblCDS.Rows.Add(FinalProbs.Select(x => (object)x).ToArray());
                 tblCDS.Rows[MatrixSize].HeaderCell.Value = "t";
+
+                if (chbxOscillation.Checked)
+                    txtBxTime.Text = CalcOscillationTime().ToString();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private double CalcOscillationTime()
+        {
+            double deltaT = 0.0001;
+            double[] curProbs = new double[MatrixSize];
+            double[] prevProbs = new double[MatrixSize];
+
+            ClearArray(curProbs);
+            curProbs[0] = 1;
+
+            double t;
+            for (t = 0; !Compare.Equal(curProbs, FinalProbs); t += deltaT)
+            {
+                prevProbs = (double[])curProbs.Clone();
+                for (int i = 0; i < MatrixSize; ++i)
+                {
+                    double densitySum = 0;
+                    for (int j = 0; j < MatrixSize; ++j)
+                        densitySum += Matr[i, j] * prevProbs[j];
+                    curProbs[i] = prevProbs[i] + densitySum * deltaT;
+                }
+            }
+
+            return t;
         }
 
         private void ClearMatrix(double[,] matrix, int rowCount, int colCount)
@@ -131,6 +159,29 @@ namespace MarkovProcess
         private void MainForm_Load(object sender, EventArgs e)
         {
             btnSizeOk_Click(this, new EventArgs());
+        }
+
+        private void chbxOscillation_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chbxOscillation.Checked)
+                txtBxTime.Enabled = true;
+            else
+                txtBxTime.Enabled = false;
+        }
+
+        private void btnRandom_Click(object sender, EventArgs e)
+        {
+            btnClear_Click(this, new EventArgs());
+            Random rnd = new Random();
+            for (int i = 0; i < MatrixSize; ++i)
+                for (int j = 0; j < MatrixSize; ++j)
+                {
+                    int fill = rnd.Next(3);
+                    if (fill == 0)
+                        continue;
+                    tblCDS[j, i].Value = rnd.Next(8).ToString();
+                }
+
         }
 
 
