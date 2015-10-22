@@ -34,6 +34,10 @@
             this.btnSizeOk = new System.Windows.Forms.Button();
             this.edtRows = new System.Windows.Forms.TextBox();
             this.bntSolve = new System.Windows.Forms.Button();
+            this.btnClear = new System.Windows.Forms.Button();
+            this.txtBxTime = new System.Windows.Forms.TextBox();
+            this.chbxOscillation = new System.Windows.Forms.CheckBox();
+            this.btnRandom = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.tblCDS)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -62,24 +66,26 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnRandom);
+            this.groupBox1.Controls.Add(this.btnClear);
             this.groupBox1.Controls.Add(this.btnSizeOk);
             this.groupBox1.Controls.Add(this.edtRows);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox1.Location = new System.Drawing.Point(12, 367);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(390, 62);
+            this.groupBox1.Size = new System.Drawing.Size(390, 88);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Размер матрицы";
             // 
             // btnSizeOk
             // 
-            this.btnSizeOk.Location = new System.Drawing.Point(281, 22);
+            this.btnSizeOk.Location = new System.Drawing.Point(264, 22);
             this.btnSizeOk.Name = "btnSizeOk";
-            this.btnSizeOk.Size = new System.Drawing.Size(102, 26);
+            this.btnSizeOk.Size = new System.Drawing.Size(119, 26);
             this.btnSizeOk.TabIndex = 5;
-            this.btnSizeOk.Text = "Применить";
+            this.btnSizeOk.Text = "Сформировать";
             this.btnSizeOk.UseVisualStyleBackColor = true;
             this.btnSizeOk.Click += new System.EventHandler(this.btnSizeOk_Click);
             // 
@@ -94,7 +100,7 @@
             // bntSolve
             // 
             this.bntSolve.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.bntSolve.Location = new System.Drawing.Point(12, 435);
+            this.bntSolve.Location = new System.Drawing.Point(12, 486);
             this.bntSolve.Name = "bntSolve";
             this.bntSolve.Size = new System.Drawing.Size(390, 33);
             this.bntSolve.TabIndex = 4;
@@ -102,20 +108,66 @@
             this.bntSolve.UseVisualStyleBackColor = true;
             this.bntSolve.Click += new System.EventHandler(this.bntSolve_Click);
             // 
+            // btnClear
+            // 
+            this.btnClear.Location = new System.Drawing.Point(264, 54);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(119, 26);
+            this.btnClear.TabIndex = 6;
+            this.btnClear.Text = "Очистить";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // txtBxTime
+            // 
+            this.txtBxTime.Location = new System.Drawing.Point(327, 462);
+            this.txtBxTime.Name = "txtBxTime";
+            this.txtBxTime.ReadOnly = true;
+            this.txtBxTime.Size = new System.Drawing.Size(75, 20);
+            this.txtBxTime.TabIndex = 6;
+            // 
+            // chbxOscillation
+            // 
+            this.chbxOscillation.AutoSize = true;
+            this.chbxOscillation.Checked = true;
+            this.chbxOscillation.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chbxOscillation.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.chbxOscillation.Location = new System.Drawing.Point(12, 460);
+            this.chbxOscillation.Name = "chbxOscillation";
+            this.chbxOscillation.Size = new System.Drawing.Size(316, 23);
+            this.chbxOscillation.TabIndex = 7;
+            this.chbxOscillation.Text = "Время прихода в стационарное состояние:";
+            this.chbxOscillation.UseVisualStyleBackColor = true;
+            this.chbxOscillation.CheckedChanged += new System.EventHandler(this.chbxOscillation_CheckedChanged);
+            // 
+            // btnRandom
+            // 
+            this.btnRandom.Location = new System.Drawing.Point(25, 54);
+            this.btnRandom.Name = "btnRandom";
+            this.btnRandom.Size = new System.Drawing.Size(214, 26);
+            this.btnRandom.TabIndex = 7;
+            this.btnRandom.Text = "Случайное заполнение";
+            this.btnRandom.UseVisualStyleBackColor = true;
+            this.btnRandom.Click += new System.EventHandler(this.btnRandom_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(417, 484);
+            this.ClientSize = new System.Drawing.Size(417, 528);
+            this.Controls.Add(this.txtBxTime);
+            this.Controls.Add(this.chbxOscillation);
             this.Controls.Add(this.bntSolve);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.tblCDS);
             this.Name = "MainForm";
             this.Text = "Моделирование марковского процесса";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.tblCDS)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -127,6 +179,10 @@
         private System.Windows.Forms.Button btnSizeOk;
         private System.Windows.Forms.TextBox edtRows;
         private System.Windows.Forms.Button bntSolve;
+        private System.Windows.Forms.Button btnClear;
+        private System.Windows.Forms.TextBox txtBxTime;
+        private System.Windows.Forms.CheckBox chbxOscillation;
+        private System.Windows.Forms.Button btnRandom;
     }
 }
 
