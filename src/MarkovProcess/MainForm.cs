@@ -102,7 +102,12 @@ namespace MarkovProcess
                 tblCDS.Rows[MatrixSize].HeaderCell.Value = "t";
 
                 if (chbxOscillation.Checked)
+                {
+                    Compare.EPS = double.Parse(txtbxEps.Text);
+                    SuccesIterationsLimit = double.Parse(txtbxInertion.Text);
+                    DeltaT = double.Parse(txtbxDeltaTime.Text);
                     txtBxTime.Text = CalcOscillationTime().ToString();
+                }
             }
             catch (Exception ex)
             {
@@ -110,9 +115,11 @@ namespace MarkovProcess
             }
         }
 
+        double SuccesIterationsLimit { get; set; }
+        double DeltaT { get; set; }
+
         private double CalcOscillationTime()
         {
-            double deltaT = 0.0001;
             double[] curProbs = new double[MatrixSize];
             double[] prevProbs = new double[MatrixSize];
 
@@ -121,19 +128,18 @@ namespace MarkovProcess
 
             double t = 0, prevT = 0, resT = 0;
             int succesIterations = 0;
-            const int SuccesIterationsLimit = 1000;
             do
             {
-                for (t = prevT; !Compare.Equal(curProbs, FinalProbs); t += deltaT)
+                for (t = prevT; !Compare.Equal(curProbs, FinalProbs); t += DeltaT)
                 {
-                    CalcProbabilities(deltaT, curProbs, prevProbs);
+                    CalcProbabilities(DeltaT, curProbs, prevProbs);
                 }
                 if (succesIterations == 0)
                 {
                     resT = t;
                     succesIterations++;
                 }
-                else if (resT - t > 1.5 * deltaT)
+                else if (resT - t > 1.5 * DeltaT)
                 {
                     resT = t;
                     succesIterations = 1;
@@ -141,7 +147,7 @@ namespace MarkovProcess
                 else
                     succesIterations++;
 
-                prevT = t + deltaT;
+                prevT = t + DeltaT;
             }
             while (succesIterations < SuccesIterationsLimit);
 
@@ -189,9 +195,15 @@ namespace MarkovProcess
         private void chbxOscillation_CheckedChanged(object sender, EventArgs e)
         {
             if (chbxOscillation.Checked)
+            {
                 txtBxTime.Enabled = true;
+                groupBox2.Enabled = true;
+            }
             else
+            {
                 txtBxTime.Enabled = false;
+                groupBox2.Enabled = false;
+            }
         }
 
         private void btnRandom_Click(object sender, EventArgs e)
@@ -204,7 +216,7 @@ namespace MarkovProcess
                     int fill = rnd.Next(3);
                     if (fill == 0)
                         continue;
-                    tblCDS[j, i].Value = rnd.Next(8).ToString();
+                    tblCDS[j, i].Value = rnd.Next(1, 8).ToString();
                 }
 
         }
