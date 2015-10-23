@@ -139,7 +139,7 @@ namespace MarkovProcess
                     resT = t;
                     succesIterations++;
                 }
-                else if (t - prevT > 1.5 * DeltaT)
+                else if (t - prevT > 0.5 * DeltaT)
                 {
                     resT = t;
                     succesIterations = 1;
